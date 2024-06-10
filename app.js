@@ -20,7 +20,7 @@ var express = require('express');
 var app = express();
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-PORT = 9425;
+PORT = 9489;
 
 // app.js
 
@@ -191,46 +191,54 @@ app.post('/add-member-form', function(req, res){
 // Update Route for updating a member's information
 
 app.put('/update-member-ajax', function(req, res){
+    // Capture the incoming data and parse it back to a JS object
     let data = req.body;
 
-    let member_id = parseInt(data.member_id);
-    let first_name = data.first_name;
-    let last_name = data.last_name;
-    let email = data.email;
-    let address = data.address;
-    let phone = data.phone;
-    let trainer_id = parseInt(data.trainer_id);
+    // Capture values
+    let member_id = parseInt(data['member_id']);
+    if (isNaN(member_id)) {
+        res.sendStatus(400);
+        return;
+    }
 
+    let first_name = data['first_name'];
+    let last_name = data['last_name'];
+    let email = data['email'];
+    let address = data['address'];
+    let phone = data['phone'];
+    let trainer_id = data['trainer_id'] === '' ? 'NULL' : parseInt(data['trainer_id']);
+    if (isNaN(trainer_id)) {
+        trainer_id = 'NULL';
+    }
+
+    // Create the query and run it on the database
     let query1 = `
         UPDATE Members 
         SET 
-            member_first_name = ?, 
-            member_last_name = ?, 
-            member_email = ?, 
-            member_address = ?, 
-            member_phone = ?, 
-            trainer_id = ?
+            member_first_name = '${first_name}', 
+            member_last_name = '${last_name}', 
+            member_email = '${email}', 
+            member_address = '${address}', 
+            member_phone = '${phone}', 
+            trainer_id = ${trainer_id}
         WHERE 
-            member_id = ?
+            member_id = ${member_id}
     `;
 
-    db.pool.query(query1, [first_name, last_name, email, address, phone, trainer_id, member_id], function(error, rows, fields) {
+    db.pool.query(query1, function(error, rows, fields) {
+        // Check to see if there was an error
         if (error) {
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
             console.log(error);
             res.sendStatus(400);
         } else {
-            let query2 = `SELECT * FROM Members WHERE member_id = ?`;
-            db.pool.query(query2, [member_id], function(error, rows, fields) {
-                if (error) {
-                    console.log(error);
-                    res.sendStatus(400);
-                } else {
-                    res.send(JSON.stringify(rows[0]));
-                }
-            });
+            // If there was no error, send the updated data back to the client
+            res.send(data);
         }
     });
 });
+
+
 
 
 

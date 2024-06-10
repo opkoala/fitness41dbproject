@@ -8,7 +8,7 @@
 */
 
 // Get the objects we need to modify
-let updateMember = document.getElementById('update-person-form');
+let updateMember = document.getElementById('update-person-form-ajax');
 
 // Modify the objects we need
 updateMember.addEventListener("submit", function (e) {
@@ -33,12 +33,13 @@ updateMember.addEventListener("submit", function (e) {
     let phoneValue = inputPhone.value;
     let trainerIDValue = inputTrainerID.value;
 
-    // currently the database table does not allow updating values to NULL
-    // so we must abort if being passed NULL for the below values
-
+    // Ensure member ID is valid
     if (isNaN(fullnameValue)) {
+        console.log("Invalid member ID");
         return;
     }
+
+
 
     let data = {
         member_id: fullnameValue,
@@ -48,7 +49,7 @@ updateMember.addEventListener("submit", function (e) {
         address: addressValue,
         phone: phoneValue,
         trainer_id: trainerIDValue
-    }
+    };
 
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
@@ -58,24 +59,20 @@ updateMember.addEventListener("submit", function (e) {
     // Tell our AJAX request how to resolve
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
-
             // Add the new data to the table
-            updateRow(xhttp.response, fullnameValue);
-
+            updateRow(data, fullnameValue);
         }
         else if (xhttp.readyState == 4 && xhttp.status != 200) {
-            console.log("There was an error with the input.")
+            console.log("There was an error with the input.");
         }
-    }
+    };
 
     // Send the request and wait for the response
     xhttp.send(JSON.stringify(data));
-
-})
-
+});
 
 function updateRow(data, memberID) {
-    let parsedData = JSON.parse(data);
+    let parsedData = data;
 
     let table = document.getElementById("people-table");
 
@@ -95,8 +92,8 @@ function updateRow(data, memberID) {
             emailTd.innerHTML = parsedData.email;
             addressTd.innerHTML = parsedData.address;
             phoneTd.innerHTML = parsedData.phone;
-            trainerTd.innerHTML = parsedData.trainer_name ? parsedData.trainer_name : "No Trainer";
+            trainerTd.innerHTML = parsedData.trainer_id ? parsedData.trainer_id : "No Trainer";
         }
     }
-    location.reload()
+    location.reload();
 }
