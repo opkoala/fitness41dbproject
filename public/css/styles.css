@@ -43,22 +43,28 @@
     font-family: 'Lato', sans-serif; /* Define with at least one font name and its related generic family name.*/
     font-size: 1em;
     line-height: 1.2;
-    margin:0 auto;
-    width: 80%;
-    padding:0 5%;
-    max-width: 1200px;
-    
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 5%;
+    padding-right:5%;
+    max-width: 90%;
   }
   
   /*  ----- Page layout blocks -----  */
   header {
-    font-family: 'Lato', sans-serif;
-    background-color: var(--darkBlue);
-    color:var(--gray);
-    margin:0%;
-    padding:3%;
     text-align: center;
-    border: 10px solid var(--midnightBlue);
+    border-style:outset;
+    font: size 1.5em;
+    background-color: var(--tan);
+    border-radius: 1px;
+    margin-top: 1px;
+    padding-left: 5%;
+    padding-right:5%;
+    border-left: 5%;
+    border-right: 5%;
+    max-width:90%;
+
+    
 
 
   }
@@ -68,13 +74,24 @@
   }
 
   main {
-    background-color: var(--tanTransparent);
-    color:var(--midnightBlue);
-    margin:0%;
-    padding:3%;
-    border: 10px solid var(--midnightBlue);
-
+    background-image: url(images/sf-sky.jpg);
+    border-style: solid;
+    border-color:var(--tan);
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    color: var(--lightGreen);
+    border-color: var(--lightGray);
+    margin: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 5%;
+    padding-right:5%;
+    max-width: 90%;
+    display:flex;justify-content:center
   }
+  
   section {}
   article {}
     #topic1 {}
@@ -116,6 +133,7 @@
 
 }
   nav a {    
+    
     color:var(--gray);
     text-decoration:none;
     display: flex;
@@ -165,7 +183,8 @@
 
   
   /*  -----  Typography  ----- */
-  p {}
+  p {
+  }
   br {}
   ol, ul, dl {}
   li {}

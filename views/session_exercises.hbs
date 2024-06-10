@@ -66,27 +66,31 @@
 <h2>Add a session to exercise</h2>
 <p>To add a new selection to an exercise, please enter the information below and click `Submit`!</p>
 <form id="add-session-exercises-form" method="POST" action="/add-session-exercises-form">
-   <label for="input-session-id">Session: </label>
+    <label for="input-session-id">Session: </label>
     <select name="input-session-id" id="input-session-id" required>
+        <option value="">Select a Session ID</option>
         {{#each sessions}}
         <option value="{{this.session_id}}">{{this.session_id}}</option>
         {{/each}}
     </select>
+
     <label for="input-exercise-id">Exercise: </label>
     <select name="input-exercise-id" id="input-exercise-id" required>
+        <option value="">Select an Exercise ID</option>
         {{#each exercises}}
         <option value="{{this.exercise_id}}">{{this.exercise_name}}</option>
         {{/each}}
     </select>
-      <label for="input-set-number">Set Num: </label>
-    <input type="number" name="input-set-number" id="input-set-number"  min="1" >
-  
+
+    <label for="input-set-number">Set Num: </label>
+    <input type="number" name="input-set-number" id="input-set-number" min="1" required>
+
     <label for="input-set-rep">Set Rep: </label>
-    <input type="number" name="input-set-rep" id="input-set-rep"  min="1" >
-    </select>
-   <input type="submit" value="Submit">
+    <input type="number" name="input-set-rep" id="input-set-rep" min="1" required>
+    
+    <input type="submit" value="Submit">
 </form>
-    </section>
+
 <!-- UPDATE a session in an exercise -->
 <h2>Update Session Exercise</h2>
 <p>To update a Session in an Exercise, please select the three choices and click 'Submit'!</p>
