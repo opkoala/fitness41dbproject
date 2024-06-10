@@ -126,22 +126,28 @@
   /*  ----- Navigation ----- Override text links for navigation only.  */
  
   nav {
-    margin: 0 auto;
-    padding: 0;
-    display: flex;
+    
+    text-align:center;
+    display:flex;
+    justify-content: center;
+    flex-flow:row wrap;
+    text-decoration:none;
     background-color: var(--lightGreen);
 
 }
   nav a {    
     
     color:var(--gray);
+    font-size:25px;
     text-decoration:none;
     display: flex;
     flex: center;
     justify-content: left;
     border-radius:5px;
     padding:1%;
+    font-weight:bold;
     margin-left:2%;
+    margin-right:3px;
     border-radius: 0;
     border-bottom: 5px solid var(--lightGreen);
   }
@@ -288,7 +294,6 @@
     border: 2px solid var(--midnightBlue);
     margin: 5px 0;
     padding: 5px;
-    /* width: 50%; */
   }
   legend {
     font-size:120%;
