@@ -34,7 +34,7 @@
   
   /*  ----- Viewport ----- elements inherited by all remaining elements ----- */
   body {       /* Can alternatively define in html {}. */
-    background-image:url(images/norcal-background.jpeg);
+    background-image:url('/images/norcal-background.jpeg');
     background-size: cover;
     background-attachment: fixed;
     background-position: top left;
