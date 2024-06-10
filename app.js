@@ -20,7 +20,7 @@ var express = require('express');
 var app = express();
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-PORT = 9429;
+PORT = 9425;
 
 // app.js
 
@@ -190,72 +190,48 @@ app.post('/add-member-form', function(req, res){
 
 // Update Route for updating a member's information
 
-app.post('/update-member-form', function(req, res){
-    // Capture the incoming data and parse it back to a JS object
+app.put('/update-member-ajax', function(req, res){
     let data = req.body;
 
-    // Capture NULL values
-    let member_id = parseInt(data['input-fullname']);
-    if (isNaN(member_id)) {
-        member_id = 'NULL';
-    }
+    let member_id = parseInt(data.member_id);
+    let first_name = data.first_name;
+    let last_name = data.last_name;
+    let email = data.email;
+    let address = data.address;
+    let phone = data.phone;
+    let trainer_id = parseInt(data.trainer_id);
 
-    let first_name = data['input-fname-update'];
-    if (!first_name) {
-        first_name = 'NULL';
-    }
-
-    let last_name = data['input-lname-update'];
-    if (!last_name) {
-        last_name = 'NULL';
-    }
-
-    let email = data['input-email-update'];
-    if (!email) {
-        email = 'NULL';
-    }
-
-    let address = data['input-address-update'];
-    if (!address) {
-        address = 'NULL';
-    }
-
-    let phone = data['input-phone-update'];
-    if (!phone) {
-        phone = 'NULL';
-    }
-
-    let trainer_id = parseInt(data['input-trainer-id-update']);
-    if (isNaN(trainer_id) || trainer_id === "") {
-        trainer_id = 'NULL';
-    }
-
-    // Create the query and run it on the database
     let query1 = `
         UPDATE Members 
         SET 
-            member_first_name = '${first_name}', 
-            member_last_name = '${last_name}', 
-            member_email = '${email}', 
-            member_address = '${address}', 
-            member_phone = '${phone}', 
-            trainer_id = ${trainer_id}
+            member_first_name = ?, 
+            member_last_name = ?, 
+            member_email = ?, 
+            member_address = ?, 
+            member_phone = ?, 
+            trainer_id = ?
         WHERE 
-            member_id = ${member_id}
+            member_id = ?
     `;
 
-    db.pool.query(query1, function(error, rows, fields) {
-        // Check to see if there was an error
+    db.pool.query(query1, [first_name, last_name, email, address, phone, trainer_id, member_id], function(error, rows, fields) {
         if (error) {
-            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
             console.log(error);
             res.sendStatus(400);
         } else {
-            // If there was no error, we redirect back to our members route
-            res.redirect('/members');
+            let query2 = `SELECT * FROM Members WHERE member_id = ?`;
+            db.pool.query(query2, [member_id], function(error, rows, fields) {
+                if (error) {
+                    console.log(error);
+                    res.sendStatus(400);
+                } else {
+                    res.send(JSON.stringify(rows[0]));
+                }
+            });
         }
     });
 });
+
 
 
 
