@@ -1,4 +1,22 @@
-<!-- session_exercises.hbs -->
+<!--
+    Citation for the following function:
+    Date: 06/07/2024
+    Copied from 
+    nodejs starter app on github for crud
+    source URL: https://github.com/osu-cs340-ecampus/nodejs-starter-app
+    Authors: George Kochera, Cortona1, currym-osu, dmgs11
+    
+    
+    Citation for the following function:
+    Date: 06/07/2024
+    Copied from 
+    HTML <input type="number"> where min = 1.
+    https://www.w3schools.com/tags/att_input_type_number.asp
+    Author: W2 Schools
+    
+-->
+
+<!-- exercise_members.hbs -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <header>
     <h1>Sessions in Exercises</h1>
@@ -61,10 +79,10 @@
         {{/each}}
     </select>
       <label for="input-set-number">Set Num: </label>
-    <input type="number" name="input-set-number" id="input-set-number">
+    <input type="number" name="input-set-number" id="input-set-number"  min="1" >
   
     <label for="input-set-rep">Set Rep: </label>
-    <input type="number" name="input-set-rep" id="input-set-rep">
+    <input type="number" name="input-set-rep" id="input-set-rep"  min="1" >
     </select>
    <input type="submit" value="Submit">
 </form>
@@ -98,11 +116,19 @@
         {{/each}}
     </select>
     
+    <label for="input-set-number">Set Num: </label>
+    <input type="number" name="setNum" id="input-set-number-update"  min="1" >
+
+    <label for="input-set-rep">Set Rep: </label>
+    <input type="number" name="setRep" id="input-set-rep-update"  min="1" >
+    
     <input type="submit" value="Submit">
 
 </form>
 
 <script src="./js/update_session_exercises.js"></script>
+
+
 
 
 

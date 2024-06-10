@@ -16,11 +16,11 @@
     SETUP
 */
 //Express
-var express =require('express'); 
+var express = require('express'); 
 var app = express();
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-PORT = 9432;
+PORT = 9429;
 
 // app.js
 
@@ -50,11 +50,8 @@ app.use(express.static(__dirname + '/public')); // this is needed to allow for t
 
 // Route for the home page
 app.get('/', function (req, res) {
-    let query1 = "SELECT * FROM Members;";
-    db.pool.query(query1, function (error, rows, fields) {
-        res.render('index', { data: rows });
+        res.render('index');
     });
-});
 
 // Route for the trainers page
 app.get('/trainers', function (req, res) {
@@ -141,11 +138,30 @@ app.post('/add-member-form', function(req, res){
     let data = req.body;
 
     // Capture NULL Values
-    let first_name = data['input-first-name'] || 'NULL';
-    let last_name = data['input-last-name'] || 'NULL';
-    let email = data['input-email'] || 'NULL';
-    let address = data['input-address'] || 'NULL';
-    let phone = data['input-phone'] || 'NULL';
+    let first_name = data['input-first-name'];
+    if (!first_name) {
+        first_name = 'NULL';
+    }
+
+    let last_name = data['input-last-name'];
+    if (!last_name) {
+        last_name = 'NULL';
+    }
+
+    let email = data['input-email'];
+    if (!email) {
+        email = 'NULL';
+    }
+
+    let address = data['input-address'];
+    if (!address) {
+        address = 'NULL';
+    }
+
+    let phone = data['input-phone'];
+    if (!phone) {
+        phone = 'NULL';
+    }
 
     let trainer_id = parseInt(data['input-trainer-id']);
     if (isNaN(trainer_id) || trainer_id === "") {
@@ -171,6 +187,7 @@ app.post('/add-member-form', function(req, res){
     });
 });
 
+
 // Update Route for updating a member's information
 
 app.post('/update-member-form', function(req, res){
@@ -183,11 +200,30 @@ app.post('/update-member-form', function(req, res){
         member_id = 'NULL';
     }
 
-    let first_name = data['input-fname-update'] || 'NULL';
-    let last_name = data['input-lname-update'] || 'NULL';
-    let email = data['input-email-update'] || 'NULL';
-    let address = data['input-address-update'] || 'NULL';
-    let phone = data['input-phone-update'] || 'NULL';
+    let first_name = data['input-fname-update'];
+    if (!first_name) {
+        first_name = 'NULL';
+    }
+
+    let last_name = data['input-lname-update'];
+    if (!last_name) {
+        last_name = 'NULL';
+    }
+
+    let email = data['input-email-update'];
+    if (!email) {
+        email = 'NULL';
+    }
+
+    let address = data['input-address-update'];
+    if (!address) {
+        address = 'NULL';
+    }
+
+    let phone = data['input-phone-update'];
+    if (!phone) {
+        phone = 'NULL';
+    }
 
     let trainer_id = parseInt(data['input-trainer-id-update']);
     if (isNaN(trainer_id) || trainer_id === "") {
@@ -223,11 +259,33 @@ app.post('/update-member-form', function(req, res){
 
 
 
-// Route for the members page
+// Get Route for the Exercises page
 app.get('/exercises', function (req, res) {
     let query1 = "SELECT * FROM Exercises;";
     db.pool.query(query1, function (error, rows, fields) {
         res.render('exercises', { data: rows });
+    });
+});
+
+// Add Route for the exercises page
+app.post('/add-exercise-form', function(req, res){
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
+
+
+    // Create the query and run it on the database
+    let query1 = `INSERT INTO Exercises (exercise_name, description) VALUES ('${data['input-ename']}', '${data['input-description']}')`;
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            // If there was no error, we redirect back to our exercises route
+            res.redirect('/exercises');
+        }
     });
 });
 
@@ -319,27 +377,7 @@ app.post('/add-training-session-form', function(req, res){
 
 
 
-// Add Route for the exercises page
-app.post('/add-exercise-form', function(req, res){
-    // Capture the incoming data and parse it back to a JS object
-    let data = req.body;
 
-
-    // Create the query and run it on the database
-    let query1 = `INSERT INTO Exercises (exercise_name, description) VALUES ('${data['input-ename']}', '${data['input-description']}')`;
-    db.pool.query(query1, function(error, rows, fields){
-
-        // Check to see if there was an error
-        if (error) {
-            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-            console.log(error);
-            res.sendStatus(400);
-        } else {
-            // If there was no error, we redirect back to our exercises route
-            res.redirect('/exercises');
-        }
-    });
-});
 
 // Route for the Session Exercises page
 app.get('/session_exercises', function (req, res) {
@@ -463,32 +501,34 @@ app.put('/put-session-exercise-ajax', function(req, res, next) {
     let sessionExercise = parseInt(data.sessionExercise);
     let session = parseInt(data.session);
     let exercise = parseInt(data.exercise);
+    let setNum = parseInt(data.setNum);
+    let setRep = parseInt(data.setRep);
 
-    let queryUpdateSessionExercise = `UPDATE Session_Exercises SET session_id = ?, exercise_id = ? WHERE session_exercises_id = ?`;
-    let selectSession = `SELECT * FROM Training_Sessions WHERE session_id = ?`;
-    let selectExercise = `SELECT * FROM Exercises WHERE exercise_id = ?`; 
+    let queryUpdateSessionExercise = `
+        UPDATE Session_Exercises 
+        SET session_id = ?, exercise_id = ?, set_num = ?, set_rep = ? 
+        WHERE session_exercises_id = ?`;
+    
+    // Updated SELECT query to include exercise_name
+    let selectUpdatedSessionExercise = `
+        SELECT Session_Exercises.session_id AS session, Session_Exercises.exercise_id AS exercise, Exercises.exercise_name, Session_Exercises.set_num, Session_Exercises.set_rep 
+        FROM Session_Exercises
+        JOIN Exercises ON Session_Exercises.exercise_id = Exercises.exercise_id
+        WHERE Session_Exercises.session_exercises_id = ?`;
 
     // Run the 1st query
-    db.pool.query(queryUpdateSessionExercise, [session, exercise, sessionExercise], function(error, rows, fields) {
+    db.pool.query(queryUpdateSessionExercise, [session, exercise, setNum, setRep, sessionExercise], function(error, rows, fields) {
         if (error) {
             console.log(error);
             res.sendStatus(400);
         } else {
             // Run the second query
-            db.pool.query(selectSession, [sessionExercise], function(error, sessionRows, sessionFields) {
+            db.pool.query(selectUpdatedSessionExercise, [sessionExercise], function(error, exerciseRows, fields) {
                 if (error) {
                     console.log(error);
                     res.sendStatus(400);
                 } else {
-                    // Run the third query (Fetch exercise data)
-                    db.pool.query(selectExercise, [exercise], function(error, exerciseRows, exerciseFields) {
-                        if (error) {
-                            console.log(error);
-                            res.sendStatus(400);
-                        } else {
-                            res.send({ session: sessionRows, exercise: exerciseRows });
-                        }
-                    });
+                    res.send(exerciseRows[0]); 
                 }
             });
         }
@@ -498,64 +538,6 @@ app.put('/put-session-exercise-ajax', function(req, res, next) {
 
 
 
-app.post('/add-person-ajax', function (req, res) {
-    // Capture the incoming data and parse it back to a JS object
-    let data = req.body;
-
-    // Create the query and run it on the database
-    query1 = `INSERT INTO Members (member_first_name, member_last_name, member_email, member_address, member_phone) VALUES ('${data.member_first_name}', '${data.member_last_name}', '${data.member_email}', '${data.member_address}', '${data.member_phone}')`;
-    db.pool.query(query1, function (error, rows, fields) {
-        // Check to see if there was an error
-        if (error) {
-
-            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-            console.log(error)
-            res.sendStatus(400);
-        } 
-        else {
-            // If there was no error, perform a SELECT * on Members
-            query2 = `SELECT * FROM Members;`;
-            db.pool.query(query2, function (error, rows, fields) {
-
-                // If there was an error on the second query, send a 400
-                if (error) {
-
-                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-                    console.log(error);
-                    res.sendStatus(400);
-                } 
-                // If all went well, send the results of the query back.
-                else {
-                    res.send(rows);
-                }
-            })
-        }
-    })
-});
-
-app.post('/add-person-form', function (req, res) {
-    // Capture the incoming data and parse it back to a JS object
-    let data = req.body;
-
-    // Create the query and run it on the database
-    query1 = `INSERT INTO Members (member_first_name, member_last_name, member_email, member_address, member_phone) VALUES ('${data['input-fname']}', '${data['input-lname']}', '${data['input-email']}', '${data['input-address']}', '${data['input-phone']}')`;
-    db.pool.query(query1, function (error, rows, fields) {
-
-        // Check to see if there was an error
-        if (error) {
-
-            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-            console.log(error)
-            res.sendStatus(400);
-        } 
-        
-        // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM bsg_people and
-        // presents it on the screen
-        else {
-            res.redirect('/');
-        }
-    })
-})
 
 app.delete('/delete-person-ajax/', function (req, res, next) {
     let data = req.body;
