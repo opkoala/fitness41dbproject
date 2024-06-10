@@ -1,0 +1,108 @@
+<!-- session_exercises.hbs -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<header>
+    <h1>Sessions in Exercises</h1>
+    <nav class='global'>
+        <a href='/'>Home Page </a>
+        <a href='/trainers'>Trainers</a>
+        <a href='/members'>Members</a>
+        <a href='/exercises'>Exercises</a>
+        <a href='/training_sessions'>Training Sessions</a>
+        <a href='/session_exercises'>Session Exercises</a>
+       
+    </nav>
+</header>
+
+{{!-- Create a table --}}
+<table id="session-exercises-table">
+    {{!-- Header section --}}
+    <thead>
+        <tr>
+            <th>Session Exercise ID</th>
+            <th>Session ID</th>
+            <th>Exercise ID</th>
+            <th>Exercise Name</th>
+            <th>Set Num</th>
+            <th>Set Rep</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <!-- Body section -->
+    <tbody>
+        {{#each data}}
+        <tr data-value={{this.session_exercises_id}}>
+            <td>{{this.session_exercises_id}}</td>
+            <td>{{this.session_id}}</td>
+            <td>{{this.exercise_id}}</td>
+            <td>{{this.exercise_name}}</td>
+            <td>{{this.set_num}}</td>
+            <td>{{this.set_rep}}</td>
+            <td><button onclick="deleteSessionExercise({{this.session_exercises_id}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_session_exercises.js"></script>
+
+{{!-- Form to add a record to the table using standard HTML forms --}}
+<h2>Add a session to exercise</h2>
+<p>To add a new selection to an exercise, please enter the information below and click `Submit`!</p>
+<form id="add-session-exercises-form" method="POST" action="/add-session-exercises-form">
+   <label for="input-session-id">Session: </label>
+    <select name="input-session-id" id="input-session-id" required>
+        {{#each sessions}}
+        <option value="{{this.session_id}}">{{this.session_id}}</option>
+        {{/each}}
+    </select>
+    <label for="input-exercise-id">Exercise: </label>
+    <select name="input-exercise-id" id="input-exercise-id" required>
+        {{#each exercises}}
+        <option value="{{this.exercise_id}}">{{this.exercise_name}}</option>
+        {{/each}}
+    </select>
+      <label for="input-set-number">Set Num: </label>
+    <input type="number" name="input-set-number" id="input-set-number">
+  
+    <label for="input-set-rep">Set Rep: </label>
+    <input type="number" name="input-set-rep" id="input-set-rep">
+    </select>
+   <input type="submit" value="Submit">
+</form>
+    </section>
+<!-- UPDATE a session in an exercise -->
+<h2>Update Session Exercise</h2>
+<p>To update a Session in an Exercise, please select the three choices and click 'Submit'!</p>
+<form id="update-session-exercises-form-ajax">
+
+    <label for="input-sessionExercisesID">Session Exercise ID: </label>
+    <select name="sessionExercise" id="input-session-exercise-update">
+        <option value="">Select a Session Exercise ID</option>
+        {{#each data}}
+        <option value="{{this.session_exercises_id}}">{{this.session_exercises_id}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-session">Session: </label>
+    <select name="session" id="input-session-update">
+        <option value="">Select a Session</option>
+        {{#each sessions}}
+        <option value="{{this.session_id}}">{{this.session_id}}</option>
+        {{/each}}
+    </select>
+   
+    <label for="input-exercise">Exercise: </label>
+    <select name="exercise" id="input-exercise-update">
+        <option value="">Select an Exercise</option>
+        {{#each exercises}}
+        <option value="{{this.exercise_id}}">{{this.exercise_name}}</option>
+        {{/each}}
+    </select>
+    
+    <input type="submit" value="Submit">
+
+</form>
+
+<script src="./js/update_session_exercises.js"></script>
+
+
+

@@ -1,0 +1,63 @@
+<!-- training_sessions.hbs -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<header>
+    <h1>Training Sessions</h1>
+       <nav class='global'>
+        <a href='/'>Home Page </a>
+        <a href='/trainers'>Trainers</a>
+        <a href='/members'>Members</a>
+        <a href='/exercises'>Exercises</a>
+        <a href='/training_sessions'>Training Sessions</a>
+        <a href='/session_exercises'>Session Exercises</a>
+    </nav>
+</header>
+
+<table id="training-sessions-table">
+    <thead>
+        <tr>
+            <th>Session ID</th>
+            <th>Member ID</th>
+            <th>Member Name</th>
+            <th>Training Length</th>
+            <th>Trainer ID</th>
+            <th>Trainer Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{this.session_id}}</td>
+            <td>{{this.member_id}}</td>
+            <td>{{this.member_first_name}} {{this.member_last_name}}</td>
+            <td>{{this.training_length}}</td>
+            <td>{{this.trainer_id}}</td>
+            <td>{{this.trainer_first_name}} {{this.trainer_last_name}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{!-- Form to add a record to the table using standard HTML forms --}}
+<h2>Add Training Session</h2>
+<p>To add a new training session, please enter the information below and click `Submit`!</p>
+<form id="add-training-session-form" method="POST" action="/add-training-session-form">
+    <label for="input-member-id">Member: </label>
+    <select name="input-member-id" id="input-member-id" required>
+        {{#each members}}
+        <option value="{{this.member_id}}">{{this.member_first_name}} {{this.member_last_name}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-training-length">Training Length: </label>
+    <input type="number" name="input-training-length" id="input-training-length" required>
+
+    <label for="input-trainer-id">Trainer: </label>
+    <select name="input-trainer-id" id="input-trainer-id" required>
+        {{#each trainers}}
+        <option value="{{this.trainer_id}}">{{this.trainer_first_name}} {{this.trainer_last_name}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit" value="Submit">
+</form>

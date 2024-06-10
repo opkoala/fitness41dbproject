@@ -1,0 +1,58 @@
+<!-- index.hbs -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<header>
+    <h1>Exercises</h1>
+    <nav class = 'global'>
+        <a href='/'>Home Page </a>
+        <a href='/trainers'>Trainers</a>
+        <a href='/members'>Members</a>
+        <a href='/exercises'>Exercises</a>
+        <a href='/training_sessions'>Training Sessions</a>
+        <a href='/session_exercises'>Session Exercises</a>
+    </nav>
+</header>
+
+
+</header>
+
+{{!-- Create a table --}}
+<table id="exercises-table">
+
+    {{!-- Header section --}}
+    <thead>
+        <tr>
+            <th>Exercise ID</th>
+            <th>Exercise Name</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+
+
+   {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the member_id, member_first_name, member_last_name, member_address and member_phone, in order --}}
+        {{#each data}}
+            <td>{{this.exercise_id}}</td>
+            <td>{{this.exercise_name}}</td>
+            <td>{{this.description}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{!-- Form to add a record to the table using AJAX --}}
+<h2>Add Exercises</h2>
+<p>To add a new exercise, please enter their information below and click 'Submit'!</p>
+<form id="add-exercise-form" method="POST" action="/add-exercise-form">
+    <label for="input-ename">Exercise Name: </label>
+    <input type="text" name="input-ename" id="input-ename">
+    
+    <label for="input-description">Description: </label>
+    <input type="text" name="input-description" id="input-description">
+
+    <input type="submit">
+</form>
+
+
