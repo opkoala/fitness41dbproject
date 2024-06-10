@@ -539,23 +539,6 @@ app.delete('/delete-person-ajax/', function (req, res, next) {
     })
 });
 
-// PUT ROUTES
-app.put('/update-member/:memberID', (req, res) => {
-    const memberID = req.params.memberID;
-    const { member_first_name, member_last_name, member_email, member_address, member_phone } = req.body;
-  
-    const query = `UPDATE Members SET member_first_name = ?, member_last_name = ?, member_email = ?, member_address = ?, member_phone = ? WHERE member_id = ?`;
-  
-    db.pool.query(query, [member_first_name, member_last_name, member_email, member_address, member_phone, memberID], (error, results) => {
-      if (error) {
-        console.log(error);
-        res.status(500).send('Database error: ' + error.message);
-      } else {
-        res.status(200).send('Member updated successfully');
-      }
-    });
-  });
-
 
   
   
