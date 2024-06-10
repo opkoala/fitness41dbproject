@@ -74,7 +74,7 @@ updateMember.addEventListener("submit", function (e) {
 function updateRow(data, memberID) {
     let parsedData = data;
 
-    let table = document.getElementById("people-table");
+    let table = document.getElementById("members-table");
 
     for (let i = 0, row; row = table.rows[i]; i++) {
         if (table.rows[i].getAttribute("data-value") == memberID) {
