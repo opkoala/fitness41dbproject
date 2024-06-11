@@ -1,3 +1,7 @@
+-- DDL file that will correspond to the CS340 Portfolio Project deliverables.
+
+SET FOREIGN_KEY_CHECKS=0;
+SET AUTOCOMMIT = 0;
 -- Create Trainers table
 CREATE OR REPLACE TABLE Trainers (
     trainer_id INT NOT NULL AUTO_INCREMENT,
@@ -45,8 +49,8 @@ INSERT INTO Members (
 VALUES
     ('Lebron', 'James', 'kingjames23@gmail.com', '1543 Orchard Park', '4084255679', 1),
     ('Kevin', 'Durant', 'kevindurantsuns@gmail.com', '4581 Westfield Way', '4155151254', 2),
-    ('Stephen', 'Curry', 'WardenCurry30@gmail.com', '5415 Westfield Way', '4156543451', 2);
-
+    ('Stephen', 'Curry', 'WardenCurry30@gmail.com', '5415 Westfield Way', '4156543451', 2),
+    ('Kenny', 'G', 'saxophoneman24@gmail.com', '5430 instrumental way', '4156343491', NULL);
 -- Create Exercises table
 CREATE OR REPLACE TABLE Exercises (
     exercise_id INT NOT NULL AUTO_INCREMENT,
@@ -66,11 +70,11 @@ VALUES
 
 -- Create Training_Sessions table
 CREATE OR REPLACE TABLE Training_Sessions (
-    session_id INT AUTO_INCREMENT,
+    session_id INT NOT NULL AUTO_INCREMENT,
     member_id INT NOT NULL,
     training_length INT,
     trainer_id INT NOT NULL, 
-    FOREIGN KEY (member_id) REFERENCES Members(member_id),
+    FOREIGN KEY (member_id) REFERENCES Members(member_id) ON DELETE CASCADE,
     FOREIGN KEY (trainer_id) REFERENCES Trainers(trainer_id),
     PRIMARY KEY(session_id)
 );
@@ -106,3 +110,6 @@ VALUES
     (3, 3, 1, 20),
     (1, 5, 4, 10),
     (2, 4, 3, 8); 
+
+SET FOREIGN_KEY_CHECKS=1;
+COMMIT;

@@ -537,9 +537,6 @@ app.put('/put-session-exercise-ajax', function(req, res, next) {
 
 
 
-
-
-
   
 /*
     LISTENER
