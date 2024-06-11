@@ -20,7 +20,7 @@ var express = require('express');
 var app = express();
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-PORT = 9489;
+PORT = 9431;
 
 // app.js
 
@@ -187,7 +187,23 @@ app.post('/add-member-form', function(req, res){
     });
 });
 
+// Delete Route for deleting a member's information
 
+app.delete('/delete-person-ajax/', function (req, res, next) {
+    let data = req.body;
+    let personID = parseInt(data.id);
+    let deleteMember = `DELETE FROM Members WHERE member_id = ?`; 
+
+    // Run the deleteMember query
+    db.pool.query(deleteMember, [personID], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.sendStatus(204);
+        }
+    })
+});
 // Update Route for updating a member's information
 
 app.put('/update-member-ajax', function(req, res){
@@ -237,9 +253,6 @@ app.put('/update-member-ajax', function(req, res){
         }
     });
 });
-
-
-
 
 
 
@@ -523,25 +536,9 @@ app.put('/put-session-exercise-ajax', function(req, res, next) {
 
 
 
-app.delete('/delete-person-ajax/', function (req, res, next) {
-    let data = req.body;
-    let personID = parseInt(data.id);
-    let deleteMember = `DELETE FROM Members WHERE member_id = ?`; 
-
-    // Run the deleteMember query
-    db.pool.query(deleteMember, [personID], function (error, rows, fields) {
-        if (error) {
-            console.log(error);
-            res.sendStatus(400);
-        } else {
-            res.sendStatus(204);
-        }
-    })
-});
 
 
-  
-  
+
 
   
 /*
