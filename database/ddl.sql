@@ -47,9 +47,9 @@ INSERT INTO Members (
     trainer_id
 )
 VALUES
-    ('Lebron', 'James', 'kingjames23@gmail.com', '1543 Orchard Park', '4084255679', 1),
-    ('Kevin', 'Durant', 'kevindurantsuns@gmail.com', '4581 Westfield Way', '4155151254', 2),
-    ('Stephen', 'Curry', 'WardenCurry30@gmail.com', '5415 Westfield Way', '4156543451', 2),
+    ('Lebron', 'James', 'kingjames23@gmail.com', '1543 Orchard Park', '4084255679', (SELECT trainer_id FROM Trainers WHERE trainer_first_name = 'Gilbert' AND trainer_last_name = 'Arenas')),
+    ('Kevin', 'Durant', 'kevindurantsuns@gmail.com', '4581 Westfield Way', '4155151254', (SELECT trainer_id FROM Trainers WHERE trainer_first_name = 'Shannon' AND trainer_last_name = 'Sharpe')),
+    ('Stephen', 'Curry', 'WardenCurry30@gmail.com', '5415 Westfield Way', '4156543451', (SELECT trainer_id FROM Trainers WHERE trainer_first_name = 'Shannon' AND trainer_last_name = 'Sharpe')),
     ('Kenny', 'G', 'saxophoneman24@gmail.com', '5430 instrumental way', '4156343491', NULL);
 -- Create Exercises table
 CREATE OR REPLACE TABLE Exercises (
@@ -86,9 +86,9 @@ INSERT INTO Training_Sessions (
     trainer_id
 )
 VALUES 
-    (1, 60, 1),
-    (2, 65, 1),
-    (3, 70, 2);
+    ((SELECT member_id FROM Members WHERE member_first_name = 'Lebron' AND member_last_name = 'James'), 60, (SELECT trainer_id FROM Trainers WHERE trainer_first_name = 'Gilbert' AND trainer_last_name = 'Arenas')),
+    ((SELECT member_id FROM Members WHERE member_first_name = 'Kevin' AND member_last_name = 'Durant'), 65, (SELECT trainer_id FROM Trainers WHERE trainer_first_name = 'Gilbert' AND trainer_last_name = 'Arenas')),
+    ((SELECT member_id FROM Members WHERE member_first_name = 'Stephen' AND member_last_name = 'Curry'), 70, (SELECT trainer_id FROM Trainers WHERE trainer_first_name = 'Shannon' AND trainer_last_name = 'Sharpe'));
 
 -- Create Session_Exercises table for Many-to-Many relationship between Exercises and Training_Sessions
 CREATE OR REPLACE TABLE Session_Exercises (
@@ -105,11 +105,12 @@ CREATE OR REPLACE TABLE Session_Exercises (
 -- Inserting data into Session_Exercises table
 INSERT INTO Session_Exercises (session_id, exercise_id, set_num, set_rep)
 VALUES
-    (1, 1, 5, 5),
-    (2, 2, 3, 12),
-    (3, 3, 1, 20),
-    (1, 5, 4, 10),
-    (2, 4, 3, 8); 
+    ((SELECT session_id FROM Training_Sessions WHERE member_id = (SELECT member_id FROM Members WHERE member_first_name = 'Lebron' AND member_last_name = 'James') AND training_length = 60), (SELECT exercise_id FROM Exercises WHERE exercise_name = 'Bench Press'), 5, 5),
+    ((SELECT session_id FROM Training_Sessions WHERE member_id = (SELECT member_id FROM Members WHERE member_first_name = 'Kevin' AND member_last_name = 'Durant') AND training_length = 65), (SELECT exercise_id FROM Exercises WHERE exercise_name = 'Arm Curls'), 3, 12),
+    ((SELECT session_id FROM Training_Sessions WHERE member_id = (SELECT member_id FROM Members WHERE member_first_name = 'Stephen' AND member_last_name = 'Curry') AND training_length = 70), (SELECT exercise_id FROM Exercises WHERE exercise_name = 'Barbell Squats'), 1, 20),
+    ((SELECT session_id FROM Training_Sessions WHERE member_id = (SELECT member_id FROM Members WHERE member_first_name = 'Lebron' AND member_last_name = 'James') AND training_length = 60), (SELECT exercise_id FROM Exercises WHERE exercise_name = 'Dumbbell Shoulder Press'), 4, 10),
+    ((SELECT session_id FROM Training_Sessions WHERE member_id = (SELECT member_id FROM Members WHERE member_first_name = 'Kevin' AND member_last_name = 'Durant') AND training_length = 65), (SELECT exercise_id FROM Exercises WHERE exercise_name = 'Deadlifts'), 3, 8);
+   
 
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
