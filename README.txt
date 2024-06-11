@@ -16,11 +16,17 @@ citations:
     Authors: Pam Van Londen 
 
     Citation for the following function:
+    Date: 06/07/2024
+    Copied from 
+    Google Fonts
+    source URL: https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@900&display=swap
+    Authors: Google
+
+    Citation for the following function:
     Date: 06/10/2024
     Copied from 
     HTML <input type="number"> where min = 1.
     https://www.w3schools.com/tags/att_input_type_number.asp
     Author: W2 Schools
-
-    
+ 
 -->
