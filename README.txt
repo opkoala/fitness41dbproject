@@ -14,5 +14,12 @@ citations:
     HTML <input type="number"> where min = 1.
     https://www.w3schools.com/tags/att_input_type_number.asp
     Author: W2 Schools
+
+    Citation for the following function:
+    Date: 06/07/2024
+    Copied from 
+    css template CS290 - Global Stylesheet
+    source URL: https://replit.com/@PamVanLonden/a-Global-Stylesheet#App.css
+    Authors: Pam Van Londen 
     
 -->
